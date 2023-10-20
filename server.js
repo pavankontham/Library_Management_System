@@ -9,6 +9,10 @@ app.get('/',(req,res)=>{
     res.send(' hello api');
 })
 
+app.post('/product', (req,res)=>{
+    console.log(req.body)
+})
+
 // connnection with db 
 mongoose
   .connect(
