@@ -13,7 +13,6 @@ app.get('/',(req,res)=>{
 })
 
 //store the data in db
-
 app.post('/products', async(req,res)=>{
    try{
     const product = await Product.create(req.body)
@@ -50,6 +49,43 @@ app.get('/products/:id', async(req,res)=>{
         
     }
 })
+
+//update  a product
+app.put('/products/:id',async(req,res)=>{
+    try {
+        const {id} = req.params;
+        const product = await Product.findByIdAndUpdate(id,req.body)
+        //check product is update or  not
+        if(!product){
+            return res.status(404).json({message: `cannot find any project with ID ${id}`})
+        }
+        //for to get latest updation from the db
+        const updatedProduct = await Product.findById(id);
+        res.status(200).json(updatedProduct);
+        
+    } catch (error) {
+        res.status(500).json({message:error.message})
+        
+    }
+}) 
+
+//delete a product
+
+app.delete('/products/:id', async(req,res) => {
+    try {
+        const {id} =  req.params;
+        const product = await Product.findByIdAndDelete(id);
+        if(!product){
+            return res.status(404).json({message: `Cannot  find any product with this ${id}`})
+        }
+        res.status(200).json(product);
+        
+    } catch (error) {
+        res.status(500).json({message: error.message})
+        
+    }
+})
+
 
 // connnection with db 
 mongoose
